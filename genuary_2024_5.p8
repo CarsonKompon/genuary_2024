@@ -6,16 +6,59 @@ __lua__
 -- by carson kompon
 
 cls(0)
-?"\^!5f10789:;<😐"
+?"\^!5f10?●ˇ●ˇ█"
 cols=6
 o={}
 f=0
 
-function _update60()
+function _update60()	
+	if(f%2==0)spawn()
 	
+	for s in all(o)do
+		s:update()
+	end
 	
+	for i=0,299do
+		local x=rnd(128)
+		local y=rnd(128)
+		pset(x,y,0)
+	end
 	
 	f+=1
+end
+
+function spawn()
+	local s={
+		x=flr(rnd(4))*32+16,
+		y=flr(rnd(4))*32+16,
+		c=rnd(cols),
+		d=flr(rnd(4))/4,
+		s=1,--rnd(2),
+		r=flr(rnd(8))+3,
+		f=8+flr(rnd(20)),
+		m=10,
+		t=rnd({-.25,.25}),
+		a=rnd(.02)-.01,
+		update=function(s)
+			local lx=s.x
+			local ly=s.y
+			s.x+=cos(s.d)*s.s
+			s.y+=sin(s.d)*s.s
+			line(lx,ly,s.x,s.y,s.c)
+			if s.m%s.f==0then
+				s.d+=s.t+s.a
+				s.r-=1
+				if(s.r<=0)del(o,s)
+			end
+			s.m+=1
+		end
+	}
+	local d=s.d-(.25*sgn(s.t))
+	local z=s.f/2
+	s.x+=cos(d)*z
+	s.y+=sin(d)*z
+	s.a*=s.f/64
+	add(o,s)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
